@@ -1,0 +1,44 @@
+---
+title: "Economist Chart"
+author: "Igor Morzan"
+date: "4/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readxl)
+library(tidyverse)
+library(fs)
+library(ggthemes)
+library(janitor)
+
+data <- read_csv(file = "http://infographics.economist.com/databank/Economist_eu-balance.csv",
+                  col_types = cols(X1 = col_character(),
+                  `Current-account balance, euro million` = col_double(),
+                  `Current-account balance, euro million_1` = col_double(),
+                  `Current-account balance, euro million_2` = col_double(),
+                  `Current-account balance, euro million_3` = col_double(),
+                  `Current-account balance, euro million_4` = col_double(),
+                  `Current-account balance, euro million_5` = col_double(),
+                  `Current-account balance, euro million_6` = col_double(),
+                  `Budget balance, euro million` = col_double(),
+                  `Budget balance, euro million_1` = col_double(),
+                  `Budget balance, euro million_2` = col_double(),
+                  `Budget balance, euro million_3` = col_double(),
+                  `Budget balance, euro million_4` = col_double(),
+                  `Budget balance, euro million_5` = col_double(),
+                  `Budget balance, euro million_6` = col_double()),
+                  skip = 1) %>%
+   mutate(new_country = case_when(Country == "Germany" ~ "Germany",
+                              Country == "Greece" ~ "Greece",
+                              Country == "Netherlands" ~ "Netherlands",
+                              Country == "Spain" ~ "Spain",
+                              TRUE ~ "Other")) %>%
+   select(-Country) %>%
+   group_by(new_country) %>%
+   view()
+
+# first column sets of years is the Current-Account balance, while the second set is the Budget balance
+```
+
